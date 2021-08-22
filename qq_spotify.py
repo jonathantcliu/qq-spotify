@@ -46,18 +46,20 @@ while playlist_results['next']:
 for i in range(len(tracks)):
     tracks[i] = tracks[i]['track']['id']
 
+sp.user_playlist_remove_all_occurrences_of_tracks(os.environ['SPOTIPY_USER'], os.environ['SPOTIPY_PLAYLIST'], tracks)
+
 for i in range(len(titles)):
     print('Title: {}, Artist: {}'.format(titles[i], artists[i]))
-    # could replace '/' with ',' to comply with Spotify's standards
+    # could replace '/' with ', ' to comply with Spotify's standards
     queries = [titles[i] + ' ' + artists[i]]
     stripped_title = re.sub("[\(\[].*?[\)\]]", "", titles[i])
-    if '/' in artists:
+    if '/' in artists[i]:
         for artist in artists[i].split('/'):
             queries.append(titles[i] + ' ' + artist)
         for artist in artists[i].split('/'):
             queries.append(stripped_title + ' ' + artist)
     # last resort query
-    queries.append(stripped_title)
+    # queries.append(stripped_title)
 
     song = ""
     song_title = ""
@@ -72,8 +74,8 @@ for i in range(len(titles)):
         print("{} not available".format(query))
         continue
 
-    if song.split('track:')[1] in tracks:
-        print("duplicate:", query)
-    else:
-        print("added song:", query)
-        results = sp.user_playlist_add_tracks(os.environ['SPOTIPY_USER'], os.environ['SPOTIPY_PLAYLIST'], [song])
+    # if song.split('track:')[1] in tracks:
+        # print("duplicate:", query)
+    print("added song:", query)
+    results = sp.user_playlist_add_tracks(os.environ['SPOTIPY_USER'], os.environ['SPOTIPY_PLAYLIST'], [song])
+    
